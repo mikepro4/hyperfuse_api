@@ -14,7 +14,33 @@ Resources:
         HelloWorld:
           Type: Api 
           Properties:
-            Path: /helloWorld
+            Path: /hello
+            Method: get
+    
+  LambdaToInvokeFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambdaToInvoke/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        LambdaToInvoke:
+          Type: Api 
+          Properties:
+            Path: /invoke
+            Method: get
+
+  InvokerFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: invoker/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        Invoker:
+          Type: Api 
+          Properties:
+            Path: /receive
             Method: get
 
 Outputs:
@@ -27,3 +53,21 @@ Outputs:
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt HelloWorldFunctionRole.Arn
+  LambdaToInvokeApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/invoke/"
+  LambdaToInvokeFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt LambdaToInvokeFunction.Arn
+  LambdaToInvokeFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt LambdaToInvokeFunctionRole.Arn
+  InvokerApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/receive/"
+  InvokerFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt LambdaToInvokeFunction.Arn
+  InvokerunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt LambdaToInvokeFunctionRole.Arn
