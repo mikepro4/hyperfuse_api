@@ -57,10 +57,10 @@ Outputs:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/invoke/"
   LambdaToInvokeFunction:
-    Description: "Hello World Lambda Function ARN"
+    Description: "Lambda Function ARN"
     Value: !GetAtt LambdaToInvokeFunction.Arn
   LambdaToInvokeFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
+    Description: "Implicit IAM Role"
     Value: !GetAtt LambdaToInvokeFunctionRole.Arn
   InvokerApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
