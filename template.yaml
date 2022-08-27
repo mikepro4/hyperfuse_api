@@ -4,6 +4,10 @@ Description: >
   sam-app
 
 Resources:
+
+  SqsQueue:
+    Type: AWS::SQS::Queue
+
   HelloWorldFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -43,6 +47,20 @@ Resources:
             Path: /receive
             Method: get
 
+  TransactionProcessingFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: transactionProcessing/
+      Handler: app.lambda_handler
+      Runtime: nodejs12.x
+      Events:
+        SqsEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt SqsQueue.Arn
+            BatchSize: 10
+
+
 Outputs:
   HelloWorldApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
@@ -71,3 +89,10 @@ Outputs:
   InvokerunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt LambdaToInvokeFunctionRole.Arn
+  TransactionProcessingFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt LambdaToInvokeFunction.Arn
+  TransactionProcessingFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt LambdaToInvokeFunctionRole.Arn
+
